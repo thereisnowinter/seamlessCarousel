@@ -4,16 +4,29 @@ $('img:nth-child(3)').addClass('enter')
 $('img:nth-child(4)').addClass('enter')
 
 let n = 1
-setInterval(()=>{
+let timerId = setInterval(()=>{
   $(`.images > img:nth-child(${x(n)})`).removeClass('current').addClass('leave')
     .one('transitionend', (e)=>{
-    	console.log(1)
       $(e.currentTarget).removeClass('leave').addClass('enter')
     })
   $(`.images > img:nth-child(${x(n+1)})`).removeClass('enter').addClass('current')
   n += 1
 },2000)
 
+document.addEventListener('visibilitychange', function(e) {
+  if(document.hidden) {
+    clearInterval(timerId)
+  } else {
+    timerId = setInterval(()=>{
+      $(`.images > img:nth-child(${x(n)})`).removeClass('current').addClass('leave')
+        .one('transitionend', (e)=>{
+          $(e.currentTarget).removeClass('leave').addClass('enter')
+        })
+      $(`.images > img:nth-child(${x(n+1)})`).removeClass('enter').addClass('current')
+      n += 1
+    },2000)    
+  }
+} )
 
 function x(n){
   if(n>4){
